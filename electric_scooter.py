@@ -11,3 +11,6 @@ class ElectricScooter(Vehicle):
 
         super().display_details()
         print(f"Max Speed Limit   : {self.max_speed_limit} km/h")
+
+    def calculate_trip_cost(self, trip_distance: float) -> float:
+        pass

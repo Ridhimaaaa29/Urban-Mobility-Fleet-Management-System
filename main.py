@@ -2,33 +2,18 @@ from vehicle import Vehicle
 from electric_car import ElectricCar
 from electric_scooter import ElectricScooter
 
+
+def print_heading(title):
+    print(f"\n{'=' * 50}")
+    print(f" {title.center(50)} ")
+    print(f"{'=' * 50}")
+
 def main():
-    print("=" * 50)
-    print(" Welcome to Eco-Ride Urban Mobility System ")
-    print("=" * 50)
-
-    # ---------------- UC2 ----------------
-
-    vehicle = Vehicle(
-        vehicle_id="EV101",
-        model="Tesla Model 3",
-        battery_percentage=92.5,
-        maintenance_status="Good",
-        rental_price=1200,
-    )
-
-    print("\nVehicle Details")
-    print("-" * 50)
-    vehicle.display_details()
-    print("\nUpdating Battery...\n")
-    vehicle.set_battery_percentage(95)
-    vehicle.display_details()
+    print_heading(" Welcome to Eco-Ride Urban Mobility System ")
 
     # ---------------- UC3 : Electric Car ----------------
 
-    print("\n" + "=" * 50)
-    print(" Electric Car Details ")
-    print("=" * 50)
+    print_heading(" Electric Car Details ")
 
     car = ElectricCar(
         vehicle_id="EC202",
@@ -43,9 +28,7 @@ def main():
 
     # ---------------- UC3 : Electric Scooter ----------------
 
-    print("\n" + "=" * 50)
-    print(" Electric Scooter Details ")
-    print("=" * 50)
+    print_heading(" Electric Scooter Details ")
 
     scooter = ElectricScooter(
         vehicle_id="ES201",
@@ -60,9 +43,7 @@ def main():
 
     # ---------------- Inheritance Check ----------------
 
-    print("\n" + "=" * 50)
-    print(" Inheritance Check ")
-    print("=" * 50)
+    print_heading(" Inheritance Check ")
     print(f"Is ElectricCar a Vehicle?      {isinstance(car, Vehicle)}")
     print(f"Is ElectricScooter a Vehicle?  {isinstance(scooter, Vehicle)}")
 

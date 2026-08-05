@@ -10,3 +10,6 @@ class ElectricCar(Vehicle):
 
         super().display_details()
         print(f"Seating Capacity  : {self.seating_capacity}")
+
+    def calculate_trip_cost(self, trip_distance: float) -> float:
+        pass
