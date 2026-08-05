@@ -12,4 +12,6 @@ class ElectricCar(Vehicle):
         print(f"Seating Capacity  : {self.seating_capacity}")
 
     def calculate_trip_cost(self, trip_distance: float) -> float:
-        pass
+        base_cost = 5.0
+        cost_per_km = 0.5
+        return base_cost + (trip_distance * cost_per_km)

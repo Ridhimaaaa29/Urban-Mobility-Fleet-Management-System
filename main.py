@@ -1,19 +1,26 @@
-from vehicle import Vehicle
 from electric_car import ElectricCar
 from electric_scooter import ElectricScooter
 
-
-def print_heading(title):
+def heading(title):
     print(f"\n{'=' * 50}")
-    print(f" {title.center(50)} ")
+    print(title.center(50))
     print(f"{'=' * 50}")
+def display_trip_costs(vehicles, trip_data):
+
+    for vehicle in vehicles:
+        trip_value, unit = trip_data[vehicle]
+        trip_cost = vehicle.calculate_trip_cost(trip_value)
+        print(f"Model      : {vehicle.model}")
+        print(f"Trip       : {trip_value} {unit}")
+        print(f"Trip Cost  : {trip_cost:.2f}")
+        print("-" * 50)
 
 def main():
-    print_heading(" Welcome to Eco-Ride Urban Mobility System ")
+    heading(" Welcome to Eco-Ride Urban Mobility System ")
 
     # ---------------- UC3 : Electric Car ----------------
 
-    print_heading(" Electric Car Details ")
+    heading(" Electric Car Details ")
 
     car = ElectricCar(
         vehicle_id="EC202",
@@ -28,7 +35,7 @@ def main():
 
     # ---------------- UC3 : Electric Scooter ----------------
 
-    print_heading(" Electric Scooter Details ")
+    heading(" Electric Scooter Details ")
 
     scooter = ElectricScooter(
         vehicle_id="ES201",
@@ -41,11 +48,16 @@ def main():
 
     scooter.display_details()
 
-    # ---------------- Inheritance Check ----------------
+    # ---------------- Polymorphism Demonstration ----------------
 
-    print_heading(" Inheritance Check ")
-    print(f"Is ElectricCar a Vehicle?      {isinstance(car, Vehicle)}")
-    print(f"Is ElectricScooter a Vehicle?  {isinstance(scooter, Vehicle)}")
+    heading("Trip Cost Calculation")
+    vehicles = [car, scooter]
+    trip_data = {
+    car: (20, "km"),
+    scooter: (30, "minutes"),
+    }
+
+    display_trip_costs(vehicles, trip_data)
 
 if __name__ == "__main__":
     main()
