@@ -1,63 +1,116 @@
+from fleet import Fleet
 from electric_car import ElectricCar
 from electric_scooter import ElectricScooter
 
-def heading(title):
-    print(f"\n{'=' * 50}")
-    print(title.center(50))
-    print(f"{'=' * 50}")
-def display_trip_costs(vehicles, trip_data):
 
-    for vehicle in vehicles:
-        trip_value, unit = trip_data[vehicle]
-        trip_cost = vehicle.calculate_trip_cost(trip_value)
-        print(f"Model      : {vehicle.model}")
-        print(f"Trip       : {trip_value} {unit}")
-        print(f"Trip Cost  : {trip_cost:.2f}")
-        print("-" * 50)
+def heading(title):
+    print("\n" + "=" * 50)
+    print(title.center(50))
+    print("=" * 50)
+
+
+def display_menu():
+    print("\n1. Add New Hub")
+    print("2. Add Vehicle to Existing Hub")
+    print("3. Display Fleet")
+    print("4. Exit")
+
+
+def create_vehicle():
+
+    print("\nSelect Vehicle Type")
+    print("1. Electric Car")
+    print("2. Electric Scooter")
+
+    vehicle_choice = input("Enter your choice (1-2): ")
+
+    vehicle_id = input("Enter Vehicle ID: ")
+    model = input("Enter Vehicle Model: ")
+    battery_percentage = float(input("Enter Battery Percentage: "))
+    maintenance_status = input("Enter Maintenance Status: ")
+    rental_price = float(input("Enter Rental Price: "))
+
+    if vehicle_choice == "1":
+
+        seating_capacity = int(input("Enter Seating Capacity: "))
+
+        return ElectricCar(
+            vehicle_id,
+            model,
+            battery_percentage,
+            maintenance_status,
+            rental_price,
+            seating_capacity,
+        )
+
+    elif vehicle_choice == "2":
+
+        max_speed_limit = int(input("Enter Maximum Speed Limit: "))
+
+        return ElectricScooter(
+            vehicle_id,
+            model,
+            battery_percentage,
+            maintenance_status,
+            rental_price,
+            max_speed_limit,
+        )
+
+    else:
+        print("Invalid vehicle type selected.")
+        return None
+
+
+def add_hub(fleet):
+
+    hub_name = input("Enter Hub Name: ")
+    fleet.add_hub(hub_name)
+
+
+def add_vehicle(fleet):
+
+    hub_name = input("Enter the Hub where you want to add the vehicle: ")
+
+    vehicle = create_vehicle()
+
+    if vehicle is not None:
+        fleet.add_vehicle_to_hub(hub_name, vehicle)
+
 
 def main():
-    heading(" Welcome to Eco-Ride Urban Mobility System ")
 
-    # ---------------- UC3 : Electric Car ----------------
+    fleet = Fleet()
 
-    heading(" Electric Car Details ")
+    heading("Welcome to Eco-Ride Urban Mobility System")
 
-    car = ElectricCar(
-        vehicle_id="EC202",
-        model="Nissan Leaf",
-        battery_percentage=96,
-        maintenance_status="Excellent",
-        rental_price=15000,
-        seating_capacity=5,
-    )
+    while True:
 
-    car.display_details()
+        display_menu()
 
-    # ---------------- UC3 : Electric Scooter ----------------
+        choice = input("\nSelect an option (1-4): ")
 
-    heading(" Electric Scooter Details ")
+        if choice == "1":
 
-    scooter = ElectricScooter(
-        vehicle_id="ES201",
-        model="Ather 450X",
-        battery_percentage=85,
-        maintenance_status="Good",
-        rental_price=600,
-        max_speed_limit=90,
-    )
+            add_hub(fleet)
 
-    scooter.display_details()
+        elif choice == "2":
 
-    # ---------------- Polymorphism Demonstration ----------------
+            add_vehicle(fleet)
 
-    heading("Trip Cost Calculation")
-    vehicles = [car, scooter]
-    trip_data = {
-    car: (20, "km"),
-    scooter: (30, "minutes"),
-    }
+        elif choice == "3":
 
-    display_trip_costs(vehicles, trip_data)
+            heading("Fleet Details")
+            fleet.display_hubs()
+
+        elif choice == "4":
+
+            print("\nThank you for using Eco-Ride Urban Mobility System.")
+            break
+
+        else:
+
+            print("Invalid choice. Please select a valid option.")
+
 
 if __name__ == "__main__":
     main()
