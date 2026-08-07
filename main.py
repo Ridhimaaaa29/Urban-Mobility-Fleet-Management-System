@@ -11,7 +11,9 @@ def display_menu():
     print("\n1. Add a New Hub")
     print("2. Add Vehicle to Existing Hub")
     print("3. Display Fleet")
-    print("4. Exit")
+    print("4. Search Vehicles by Hub")
+    print("5. Search Vehicles by Battery (>80%)")
+    print("6. Exit")
 
 
 def main():
@@ -25,7 +27,7 @@ def main():
         display_menu()
 
         try:
-            choice = int(input("\nEnter your choice (1-4): "))
+            choice = int(input("\nEnter your choice (1-6): "))
         
             if choice == 1:
                 fleet.add_hub()
@@ -38,6 +40,14 @@ def main():
                 fleet.view_hub()
 
             elif choice == 4:
+                heading("Search Vehicles by Hub")
+                fleet.search_by_hub()
+
+            elif choice == 5:
+                heading("Search Vehicles by Battery (>80%)")
+                fleet.search_by_battery()
+
+            elif choice == 6:
                 heading("Thank you for using Eco-Ride Urban Mobility System.")
                 break
 

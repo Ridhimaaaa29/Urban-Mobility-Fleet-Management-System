@@ -7,6 +7,22 @@ class Hub:
         self.__hub_name = hub_name
         self.__vehicles = []
 
+    def get_hub_name(self):
+        return self.__hub_name
+
+    def get_vehicles(self):
+        return self.__vehicles
+
+    def vehicle_exists(self, vehicle_id):
+
+        duplicate_vehicle = [
+            existing_vehicle
+            for existing_vehicle in self.__vehicles
+            if existing_vehicle.get_vehicle_id() == vehicle_id
+        ]
+
+        return len(duplicate_vehicle) > 0
+    
     def add_vehicle(self, vehicle):
 
         if not isinstance(vehicle, Vehicle):
@@ -23,19 +39,8 @@ class Hub:
             print(f"Vehicle ID '{vehicle.get_vehicle_id()}' already exists in '{self.__hub_name}' Hub.")
             return
 
-
         self.__vehicles.append(vehicle)
         print(f"{vehicle.model} added successfully to '{self.__hub_name}' Hub.")
-
-    def vehicle_exists(self, vehicle_id):
-
-        duplicate_vehicle = [
-            existing_vehicle
-            for existing_vehicle in self.__vehicles
-            if existing_vehicle.get_vehicle_id() == vehicle_id
-        ]
-
-        return len(duplicate_vehicle) > 0
 
     def display_vehicles(self):
 
@@ -49,3 +54,6 @@ class Hub:
         for vehicle in self.__vehicles:
             vehicle.display_details()
             print("-" * 50)
+
+    def __str__(self):
+        return f"Hub : {self.__hub_name}"      

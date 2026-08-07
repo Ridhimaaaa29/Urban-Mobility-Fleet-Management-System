@@ -8,6 +8,9 @@ class Fleet:
     def __init__(self):
         self.__hubs = {}
 
+    def find_hub(self, hub_name):
+        return self.__hubs.get(hub_name)
+
     def get_maintenance_status(self):
 
         print("\nSelect Maintenance Status")
@@ -45,8 +48,8 @@ class Fleet:
     def add_vehicle(self):
 
         hub_name = input("Enter the Hub Name: ").strip()
-
-        if hub_name not in self.__hubs:
+        hub = self.find_hub(hub_name)
+        if hub is None:
             print(f"Hub '{hub_name}' does not exist.")
             return
 
@@ -58,7 +61,7 @@ class Fleet:
 
         vehicle_id = input("Enter Vehicle ID: ")
         
-        if self.__hubs[hub_name].vehicle_exists(vehicle_id):
+        if hub.vehicle_exists(vehicle_id):
             print(f"Vehicle ID '{vehicle_id}' already exists in '{hub_name}' Hub.")
             return
 
@@ -103,20 +106,10 @@ class Fleet:
                 print("Invalid vehicle type selected.")
                 return
 
-            self.__hubs[hub_name].add_vehicle(vehicle)
+            hub.add_vehicle(vehicle)
 
         except ValueError as error:
             print(error)
-
-    def display_hub(self):
-
-        hub_name = input("Enter the Hub Name: ").strip()
-
-        if hub_name not in self.__hubs:
-            print(f"Hub '{hub_name}' does not exist.")
-            return
-
-        self.__hubs[hub_name].display_vehicles()
 
     def view_hub(self):
 
@@ -126,3 +119,38 @@ class Fleet:
 
         for hub in self.__hubs.values():
             hub.display_vehicles()
+
+    def search_by_hub(self):
+
+        hub_name = input("Enter the Hub Name: ").strip()
+        hub = self.find_hub(hub_name)
+
+        if hub is None:
+            print(f"Hub '{hub_name}' does not exist.")
+            return
+
+        hub.display_vehicles()
+
+    def search_by_battery(self):
+        vehicles = []
+
+        for hub in self.__hubs.values():
+            vehicles.extend(hub.get_vehicles())
+
+        high_battery_vehicles = list(
+            filter(
+                lambda vehicle: vehicle.get_battery_percentage() > 80,
+                vehicles,
+            )
+        )
+
+        if not high_battery_vehicles:
+            print("No vehicles found with battery greater than 80%.")
+            return
+
+        print("\nVehicles with Battery Percentage greater than 80%")
+        print("-" * 50)
+
+        for vehicle in high_battery_vehicles:
+            vehicle.display_details()
+            print("-" * 50)
