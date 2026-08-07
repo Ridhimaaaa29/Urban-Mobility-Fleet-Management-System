@@ -5,15 +5,14 @@ class Vehicle(ABC):
 
     def __init__(
         self,
-        vehicle_id: str,
-        model: str,
-        battery_percentage: float,
-        maintenance_status: str,
-        rental_price: float,
+        vehicle_id,
+        model,
+        battery_percentage,
+        maintenance_status,
+        rental_price,
     ):
         self.vehicle_id = vehicle_id
         self.model = model
-
         self.__battery_percentage = 0
         self.__maintenance_status = ""
         self.__rental_price = 0.0
@@ -22,7 +21,6 @@ class Vehicle(ABC):
         self.set_maintenance_status(maintenance_status)
         self.set_rental_price(rental_price)
 
-    # ---------------- Getters ---------------- #
 
     def get_vehicle_id(self):
         return self.vehicle_id
@@ -39,36 +37,35 @@ class Vehicle(ABC):
     def get_rental_price(self):
         return self.__rental_price
 
-    # ---------------- Setters ---------------- #
 
-    def set_battery_percentage(self, battery_percentage):
+    def set_battery_percentage(self, percentage):
 
-        if 0 <= battery_percentage <= 100:
-            self.__battery_percentage = battery_percentage
+        if 0 <= percentage <= 100:
+            self.__battery_percentage = percentage
         else:
-            raise ValueError("Battery percentage must be between 0 and 100.")
+            print("Battery percentage must be between 0 and 100.")
 
-    def set_maintenance_status(self, maintenance_status):
+    def set_maintenance_status(self, status):
 
-        if not maintenance_status.strip():
-            raise ValueError("Maintenance status cannot be empty.")
+        valid_status = ["Good", "Needs Maintenance", "Under Repair"]
 
-        self.__maintenance_status = maintenance_status
-
-    def set_rental_price(self, rental_price):
-
-        if rental_price >= 0:
-            self.__rental_price = rental_price
+        if status in valid_status:
+            self.__maintenance_status = status
         else:
-            raise ValueError("Rental price cannot be negative.")
+            print("Invalid maintenance status.")
 
-    # ---------------- Abstract Method ---------------- #
+    def set_rental_price(self, price):
+
+        if price >= 0:
+            self.__rental_price = price
+        else:
+            print("Rental price cannot be negative.")
+
 
     @abstractmethod
-    def calculate_trip_cost(self, trip_value: float) -> float:
+    def calculate_trip_cost(self, trip_value):
         pass
 
-    # ---------------- Utility Methods ---------------- #
 
     def display_details(self):
 
@@ -76,7 +73,14 @@ class Vehicle(ABC):
         print(f"Model              : {self.model}")
         print(f"Battery Percentage : {self.__battery_percentage}%")
         print(f"Maintenance Status : {self.__maintenance_status}")
-        print(f"Rental Price       : ₹{self.__rental_price:.2f}")
+        print(f"Rental Price       : ${self.__rental_price:.2f}")
+
+    def __eq__(self, other):
+
+        if isinstance(other, Vehicle):
+            return self.vehicle_id == other.get_vehicle_id()
+
+        return False
 
     def __str__(self):
 
