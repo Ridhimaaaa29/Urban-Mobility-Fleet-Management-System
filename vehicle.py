@@ -47,7 +47,7 @@ class Vehicle(ABC):
 
     def set_maintenance_status(self, status):
 
-        valid_status = ["Good", "Needs Maintenance", "Under Repair"]
+        valid_status = ["Available", "On Trip", "Under Maintenance"]
 
         if status in valid_status:
             self.__maintenance_status = status

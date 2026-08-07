@@ -26,24 +26,23 @@ class Fleet:
         elif isinstance(vehicle, ElectricScooter):
             return "Electric Scooter"
         
-        else:
-            return "Unknown Vehicle Type"
+        return None
         
     def get_maintenance_status(self):
 
         print("\nSelect Maintenance Status")
-        print("1. Good")
-        print("2. Needs Maintenance")
-        print("3. Under Repair")
+        print("1. Available")
+        print("2. On Trip")
+        print("3. Under Maintenance")
 
         choice = input("Enter your choice (1-3): ")
 
         if choice == "1":
-            return "Good"
+            return "Available"
         elif choice == "2":
-            return "Needs Maintenance"
+            return "On Trip"
         elif choice == "3":
-            return "Under Repair"
+            return "Under Maintenance"
         else:
             print("Invalid maintenance status selected.")
             return None
@@ -132,8 +131,8 @@ class Fleet:
             if added:
                 vehicle_type = self.get_vehicle_type(vehicle)
 
-            if vehicle_type:
-                self.__vehicle_categories[vehicle_type].append(vehicle)
+                if vehicle_type in ["Electric Car", "Electric Scooter"]:
+                    self.vehicle_categories[vehicle_type].append(vehicle)
 
         except ValueError as error:
             print(error)
@@ -183,18 +182,16 @@ class Fleet:
             vehicle.display_details()
             print("-" * 50)
 
-        def categorized_view(self):
-
-            if not self.__vehicle_categories:
-                print("No vehicles available.")
-                return
+    def categorized_view(self):
+        if not self.vehicle_categories:
+            print("No vehicles available.")
+            return
 
         print("\n" + "=" * 50)
         print("Vehicles Categorized by Type".center(50))
         print("=" * 50)
 
-        for vehicle_type, vehicles in self.__vehicle_categories.items():
-
+        for vehicle_type, vehicles in self.vehicle_categories.items():
             print(f"\n{vehicle_type}:")
             print("-" * 50)
 
@@ -205,3 +202,26 @@ class Fleet:
             for vehicle in vehicles:
                 vehicle.display_details()
                 print("-" * 50)
+
+    def fleet_analytics(self):
+
+        status_count = {
+            "Available": 0,
+            "On Trip": 0,
+            "Under Maintenance": 0
+        }
+
+        for hub in self.__hubs.values():
+            for vehicle in hub.get_vehicles():
+                status = vehicle.get_maintenance_status()
+                status_count[status] = status_count.get(status, 0) + 1
+
+        print("\n" + "=" * 50)
+        print("VEHICLE STATUS SUMMARY".center(50))
+        print("=" * 50)
+
+        print(f"Available             : {status_count['Available']}")
+        print(f"On Trip               : {status_count['On Trip']}")
+        print(f"Under Maintenance     : {status_count['Under Maintenance']}")
+        print("-" * 50)
+        print(f"{'Total Vehicles':<22}: {sum(status_count.values())}")
