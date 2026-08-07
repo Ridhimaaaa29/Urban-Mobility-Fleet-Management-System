@@ -129,57 +129,61 @@ class Fleet:
             added = hub.add_vehicle(vehicle)
 
             if added:
-                vehicle_type = self.get_vehicle_type(vehicle)
+                hub_name = input("Enter the Hub Name: ").strip()
 
-                if vehicle_type in ["Electric Car", "Electric Scooter"]:
-                    self.vehicle_categories[vehicle_type].append(vehicle)
+                hub = self.find_hub(hub_name)
 
-        except ValueError as error:
-            print(error)
+                if hub is None:
+                    print(f"Hub '{hub_name}' does not exist.")
+                    return
 
-    def view_hub(self):
+                vehicles = hub.get_vehicles()
 
-        if not self.__hubs:
-            print("No hubs available.")
+                if not vehicles:
+                    print("No vehicles available in this hub.")
+                    return
+
+                print("\nSort Vehicles By")
+                print("1. Battery Percentage (Highest First)")
+                print("2. Rental Price (Highest First)")
+
+                choice = input("Enter your choice (1-2): ")
+
+                if choice == "1":
+
+                    sorted_vehicles = sorted(
+                        vehicles,
+                        key=lambda vehicle: vehicle.get_battery_percentage(),
+                        reverse=True,
+                    )
+
+                    print("\nVehicles Sorted by Battery Percentage")
+
+                elif choice == "2":
+
+                    sorted_vehicles = sorted(
+                        vehicles,
+                        key=lambda vehicle: vehicle.get_rental_price(),
+                        reverse=True,
+                    )
+
+                    print("\nVehicles Sorted by Rental Price")
+
+                else:
+                    print("Invalid choice.")
+                    return
+
+                print("-" * 50)
+                print("-" * 50)
+
+                for vehicle in sorted_vehicles:
+                    print(vehicle)
+                    print("-" * 50)
+
+        except ValueError:
+            print("Invalid numeric input.")
             return
 
-        for hub in self.__hubs.values():
-            hub.display_vehicles()
-
-    def search_by_hub(self):
-
-        hub_name = input("Enter the Hub Name: ").strip()
-
-        hub = self.find_hub(hub_name)
-
-        if hub is None:
-            print(f"Hub '{hub_name}' does not exist.")
-            return
-
-        hub.display_vehicles()
-
-    def search_by_battery(self):
-        vehicles = []
-
-        for hub in self.__hubs.values():
-            vehicles.extend(hub.get_vehicles())
-
-        high_battery_vehicles = list(
-            filter(
-                lambda vehicle: vehicle.get_battery_percentage() > 80,
-                vehicles,
-            )
-        )
-
-        if not high_battery_vehicles:
-            print("No vehicles found with battery greater than 80%.")
-            return
-
-        print("\nVehicles with Battery Percentage greater than 80%")
-        print("-" * 50)
-
-        for vehicle in high_battery_vehicles:
-            vehicle.display_details()
             print("-" * 50)
 
     def categorized_view(self):
@@ -246,6 +250,57 @@ class Fleet:
         print("\n" + "=" * 50)
         print(f"Vehicles in '{hub_name}' Sorted Alphabetically".center(50))
         print("=" * 50)
+
+        for vehicle in sorted_vehicles:
+            print(vehicle)
+            print("-" * 50)
+
+    def advanced_sort(self):
+        hub_name = input("Enter the Hub Name: ").strip()
+
+        hub = self.find_hub(hub_name)
+
+        if hub is None:
+            print(f"Hub '{hub_name}' does not exist.")
+            return
+
+        vehicles = hub.get_vehicles()
+
+        if not vehicles:
+            print("No vehicles available in this hub.")
+            return
+
+        print("\nSort Vehicles By")
+        print("1. Battery Percentage (Highest First)")
+        print("2. Rental Price (Highest First)")
+
+        choice = input("Enter your choice (1-2): ")
+
+        if choice == "1":
+
+            sorted_vehicles = sorted(
+                vehicles,
+                key=lambda vehicle: vehicle.get_battery_percentage(),
+                reverse=True,
+            )
+
+            print("\nVehicles Sorted by Battery Percentage")
+
+        elif choice == "2":
+
+            sorted_vehicles = sorted(
+                vehicles,
+                key=lambda vehicle: vehicle.get_rental_price(),
+                reverse=True,
+            )
+
+            print("\nVehicles Sorted by Rental Price")
+
+        else:
+            print("Invalid choice.")
+            return
+
+        print("-" * 50)
 
         for vehicle in sorted_vehicles:
             print(vehicle)

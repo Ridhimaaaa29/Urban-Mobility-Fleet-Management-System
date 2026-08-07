@@ -63,7 +63,11 @@ def main():
                 fleet.alphabetical_sort()
 
             elif choice == 9:
-                heading("Thank you for using Eco-Ride Urban Mobility System.")
+                heading("Advanced Sorting Options")
+                fleet.advanced_sort()
+
+            elif choice == 10:
+                print("thank you for using the Eco-Ride Urban Mobility System. Goodbye!")
                 break
 
             else:
