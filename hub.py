@@ -27,6 +27,16 @@ class Hub:
         self.__vehicles.append(vehicle)
         print(f"{vehicle.model} added successfully to '{self.__hub_name}' Hub.")
 
+    def vehicle_exists(self, vehicle_id):
+
+        duplicate_vehicle = [
+            existing_vehicle
+            for existing_vehicle in self.__vehicles
+            if existing_vehicle.get_vehicle_id() == vehicle_id
+        ]
+
+        return len(duplicate_vehicle) > 0
+
     def display_vehicles(self):
 
         print(f"\nHub : {self.__hub_name}")

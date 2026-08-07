@@ -57,6 +57,11 @@ class Fleet:
         vehicle_choice = input("Enter your choice (1-2): ")
 
         vehicle_id = input("Enter Vehicle ID: ")
+        
+        if self.__hubs[hub_name].vehicle_exists(vehicle_id):
+            print(f"Vehicle ID '{vehicle_id}' already exists in '{hub_name}' Hub.")
+            return
+
         model = input("Enter Vehicle Model: ")
         battery_percentage = float(input("Enter Battery Percentage: "))
 
