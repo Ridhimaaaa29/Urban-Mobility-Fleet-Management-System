@@ -56,5 +56,12 @@ class Hub:
             vehicle.display_details()
             print("-" * 50)
 
+    def sort_vehicles(self):
+
+        return sorted(
+            self.__vehicles,
+            key=lambda vehicle: vehicle.get_model().lower()
+        )
+
     def __str__(self):
         return f"Hub : {self.__hub_name}"      

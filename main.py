@@ -15,7 +15,8 @@ def display_menu():
     print("5. Search Vehicles by Battery (>80%)")
     print("6. Categorized View")
     print("7. Fleet Analytics")
-    print("8. Exit")
+    print("8. Sort Vehicles Alphabetically by Model")
+    print("9. Exit")
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
         display_menu()
 
         try:
-            choice = int(input("\nEnter your choice (1-8): "))
+            choice = int(input("\nEnter your choice (1-9): "))
         
             if choice == 1:
                 fleet.add_hub()
@@ -56,8 +57,12 @@ def main():
             elif choice == 7:
                 heading("Fleet Analytics")
                 fleet.fleet_analytics()
-            
+
             elif choice == 8:
+                heading("Vehicles Sorted Alphabetically by Model")
+                fleet.alphabetical_sort()
+
+            elif choice == 9:
                 heading("Thank you for using Eco-Ride Urban Mobility System.")
                 break
 

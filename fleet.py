@@ -225,3 +225,28 @@ class Fleet:
         print(f"Under Maintenance     : {status_count['Under Maintenance']}")
         print("-" * 50)
         print(f"{'Total Vehicles':<22}: {sum(status_count.values())}")
+
+    def alphabetical_sort(self):
+        hub_name = input("Enter the Hub Name: ").strip()
+
+        hub = self.find_hub(hub_name)
+
+        if hub is None:
+            print(f"Hub '{hub_name}' does not exist.")
+            return
+
+        vehicles = hub.get_vehicles()
+
+        if not vehicles:
+            print("No vehicles available in this hub.")
+            return
+
+        sorted_vehicles = hub.sort_vehicles()
+
+        print("\n" + "=" * 50)
+        print(f"Vehicles in '{hub_name}' Sorted Alphabetically".center(50))
+        print("=" * 50)
+
+        for vehicle in sorted_vehicles:
+            print(vehicle)
+            print("-" * 50)
