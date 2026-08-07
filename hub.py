@@ -27,7 +27,7 @@ class Hub:
 
         if not isinstance(vehicle, Vehicle):
             print("Only Vehicle objects can be added.")
-            return
+            return False
         
         duplicate_vehicle = [
             existing_vehicle
@@ -37,10 +37,11 @@ class Hub:
 
         if duplicate_vehicle:
             print(f"Vehicle ID '{vehicle.get_vehicle_id()}' already exists in '{self.__hub_name}' Hub.")
-            return
+            return False
 
         self.__vehicles.append(vehicle)
         print(f"{vehicle.model} added successfully to '{self.__hub_name}' Hub.")
+        return True
 
     def display_vehicles(self):
 

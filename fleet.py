@@ -1,3 +1,4 @@
+from collections import defaultdict
 from hub import Hub
 from electric_car import ElectricCar
 from electric_scooter import ElectricScooter
@@ -7,10 +8,27 @@ class Fleet:
 
     def __init__(self):
         self.__hubs = {}
+        self.__vehicle_categories = defaultdict(list)
 
     def find_hub(self, hub_name):
         return self.__hubs.get(hub_name)
 
+    @property
+    def vehicle_categories(self):
+        return self.__vehicle_categories
+
+    @staticmethod
+    def get_vehicle_type(vehicle):
+
+        if isinstance(vehicle, ElectricCar):
+            return "Electric Car"
+        
+        elif isinstance(vehicle, ElectricScooter):
+            return "Electric Scooter"
+        
+        else:
+            return "Unknown Vehicle Type"
+        
     def get_maintenance_status(self):
 
         print("\nSelect Maintenance Status")
@@ -48,7 +66,9 @@ class Fleet:
     def add_vehicle(self):
 
         hub_name = input("Enter the Hub Name: ").strip()
+
         hub = self.find_hub(hub_name)
+
         if hub is None:
             print(f"Hub '{hub_name}' does not exist.")
             return
@@ -69,6 +89,7 @@ class Fleet:
         battery_percentage = float(input("Enter Battery Percentage: "))
 
         maintenance_status = self.get_maintenance_status()
+
         if maintenance_status is None:
             return
         
@@ -106,7 +127,13 @@ class Fleet:
                 print("Invalid vehicle type selected.")
                 return
 
-            hub.add_vehicle(vehicle)
+            added = hub.add_vehicle(vehicle)
+
+            if added:
+                vehicle_type = self.get_vehicle_type(vehicle)
+
+            if vehicle_type:
+                self.__vehicle_categories[vehicle_type].append(vehicle)
 
         except ValueError as error:
             print(error)
@@ -123,6 +150,7 @@ class Fleet:
     def search_by_hub(self):
 
         hub_name = input("Enter the Hub Name: ").strip()
+
         hub = self.find_hub(hub_name)
 
         if hub is None:
@@ -154,3 +182,26 @@ class Fleet:
         for vehicle in high_battery_vehicles:
             vehicle.display_details()
             print("-" * 50)
+
+        def categorized_view(self):
+
+            if not self.__vehicle_categories:
+                print("No vehicles available.")
+                return
+
+        print("\n" + "=" * 50)
+        print("Vehicles Categorized by Type".center(50))
+        print("=" * 50)
+
+        for vehicle_type, vehicles in self.__vehicle_categories.items():
+
+            print(f"\n{vehicle_type}:")
+            print("-" * 50)
+
+            if not vehicles:
+                print("No vehicles available in this category.")
+                continue
+
+            for vehicle in vehicles:
+                vehicle.display_details()
+                print("-" * 50)
