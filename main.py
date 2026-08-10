@@ -16,12 +16,16 @@ def display_menu():
     print("6. Categorized View")
     print("7. Fleet Analytics")
     print("8. Sort Vehicles Alphabetically by Model")
-    print("9. Exit")
+    print("9. Advanced Sorting Options")
+    print("10. Save and Exit")
 
 
 def main():
 
     fleet = Fleet()
+
+    # Load previously saved fleet data from CSV file
+    fleet.load_from_csv()
 
     heading("Welcome to Eco-Ride Urban Mobility System")
 
@@ -30,7 +34,7 @@ def main():
         display_menu()
 
         try:
-            choice = int(input("\nEnter your choice (1-9): "))
+            choice = int(input("\nEnter your choice (1-10): "))
         
             if choice == 1:
                 fleet.add_hub()
@@ -67,7 +71,8 @@ def main():
                 fleet.advanced_sort()
 
             elif choice == 10:
-                print("thank you for using the Eco-Ride Urban Mobility System. Goodbye!")
+                fleet.save_to_csv()
+                print("Fleet data saved. Thank you for using Eco-Ride Urban Mobility System!")
                 break
 
             else:

@@ -1,3 +1,4 @@
+import csv
 from collections import defaultdict
 from hub import Hub
 from electric_car import ElectricCar
@@ -5,6 +6,8 @@ from electric_scooter import ElectricScooter
 
 
 class Fleet:
+
+    CSV_FILE = "fleet.csv"
 
     def __init__(self):
         self.__hubs = {}
@@ -129,62 +132,24 @@ class Fleet:
             added = hub.add_vehicle(vehicle)
 
             if added:
-                hub_name = input("Enter the Hub Name: ").strip()
+                vehicle_type = self.get_vehicle_type(vehicle)
 
-                hub = self.find_hub(hub_name)
-
-                if hub is None:
-                    print(f"Hub '{hub_name}' does not exist.")
-                    return
-
-                vehicles = hub.get_vehicles()
-
-                if not vehicles:
-                    print("No vehicles available in this hub.")
-                    return
-
-                print("\nSort Vehicles By")
-                print("1. Battery Percentage (Highest First)")
-                print("2. Rental Price (Highest First)")
-
-                choice = input("Enter your choice (1-2): ")
-
-                if choice == "1":
-
-                    sorted_vehicles = sorted(
-                        vehicles,
-                        key=lambda vehicle: vehicle.get_battery_percentage(),
-                        reverse=True,
-                    )
-
-                    print("\nVehicles Sorted by Battery Percentage")
-
-                elif choice == "2":
-
-                    sorted_vehicles = sorted(
-                        vehicles,
-                        key=lambda vehicle: vehicle.get_rental_price(),
-                        reverse=True,
-                    )
-
-                    print("\nVehicles Sorted by Rental Price")
-
-                else:
-                    print("Invalid choice.")
-                    return
-
-                print("-" * 50)
-                print("-" * 50)
-
-                for vehicle in sorted_vehicles:
-                    print(vehicle)
-                    print("-" * 50)
+                if vehicle_type in ["Electric Car", "Electric Scooter"]:
+                    self.vehicle_categories[vehicle_type].append(vehicle)
 
         except ValueError:
             print("Invalid numeric input.")
             return
 
-            print("-" * 50)
+    def view_hub(self):
+
+        if not self.__hubs:
+            print("No hubs available.")
+            return
+
+        for hub in self.__hubs.values():
+            hub.display_vehicles()
+
 
     def categorized_view(self):
         if not self.vehicle_categories:
@@ -305,3 +270,111 @@ class Fleet:
         for vehicle in sorted_vehicles:
             print(vehicle)
             print("-" * 50)
+
+    def save_to_csv(self):
+
+        fieldnames = [
+            "hub_name",
+            "vehicle_type",
+            "vehicle_id",
+            "model",
+            "battery",
+            "status",
+            "rental_price",
+            "seating_capacity",
+            "max_speed_limit"
+        ]
+
+        with open(self.CSV_FILE, "w", newline="", encoding="utf-8") as file:
+
+            writer = csv.DictWriter(
+                file,
+                fieldnames=fieldnames
+            )
+
+            writer.writeheader()
+
+            for hub_name, hub in self.__hubs.items():
+
+                for vehicle in hub.get_vehicles():
+
+                    vehicle_type = self.get_vehicle_type(vehicle)
+
+                    row = {
+                        "hub_name": hub_name,
+                        "vehicle_type": vehicle_type,
+                        "vehicle_id": vehicle.get_vehicle_id(),
+                        "model": vehicle.get_model(),
+                        "battery": vehicle.get_battery_percentage(),
+                        "status": vehicle.get_maintenance_status(),
+                        "rental_price": vehicle.get_rental_price(),
+                        "seating_capacity": "",
+                        "max_speed_limit": ""
+                    }
+
+                    if isinstance(vehicle, ElectricCar):
+                        row["seating_capacity"] = vehicle.seating_capacity
+
+                    elif isinstance(vehicle, ElectricScooter):
+                        row["max_speed_limit"] = vehicle.max_speed_limit
+
+                    writer.writerow(row)
+
+        print("Fleet data saved successfully.")
+
+
+    def load_from_csv(self):
+        
+        try:
+            with open(self.CSV_FILE, "r", newline="", encoding="utf-8") as file:
+
+                reader = csv.DictReader(file)
+
+                for row in reader:
+
+                    hub_name = row["hub_name"]
+                    vehicle_type = row["vehicle_type"]
+
+                    # Create hub if it does not already exist
+                    if hub_name not in self.__hubs:
+                        self.__hubs[hub_name] = Hub(hub_name)
+
+                    hub = self.__hubs[hub_name]
+
+                    if vehicle_type == "Electric Car":
+
+                        vehicle = ElectricCar(
+                            row["vehicle_id"],
+                            row["model"],
+                            float(row["battery"]),
+                            row["status"],
+                            float(row["rental_price"]),
+                            int(row["seating_capacity"])
+                        )
+
+                    elif vehicle_type == "Electric Scooter":
+
+                        vehicle = ElectricScooter(
+                            row["vehicle_id"],
+                            row["model"],
+                            float(row["battery"]),
+                            row["status"],
+                            float(row["rental_price"]),
+                            int(row["max_speed_limit"])
+                        )
+
+                    else:
+                        print(f"Unknown vehicle type: {vehicle_type}")
+                        continue
+
+                    added = hub.add_vehicle(vehicle)
+
+                    if added:
+                        self.__vehicle_categories[
+                            vehicle_type
+                        ].append(vehicle)
+
+            print("Fleet data loaded successfully.")
+
+        except FileNotFoundError:
+            print("No existing fleet data found. Starting with an empty fleet.")
