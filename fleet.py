@@ -68,6 +68,7 @@ class Fleet:
         self.__hubs[hub_name] = Hub(hub_name)
         print(f"Hub '{hub_name}' added successfully.")
 
+
     def add_vehicle(self):
 
         hub_name = input("Enter the Hub Name: ").strip()
@@ -144,6 +145,7 @@ class Fleet:
             print("Invalid numeric input.")
             return
 
+
     def view_hub(self):
 
         if not self.__hubs:
@@ -152,7 +154,6 @@ class Fleet:
 
         for hub in self.__hubs.values():
             hub.display_vehicles()
-
 
     def categorized_view(self):
         if not self.vehicle_categories:
@@ -274,6 +275,7 @@ class Fleet:
             print(vehicle)
             print("-" * 50)
 
+
     def save_to_csv(self):
 
         fieldnames = [
@@ -324,7 +326,6 @@ class Fleet:
                     writer.writerow(row)
 
         print("Fleet data saved successfully.")
-
 
     def load_from_csv(self):
         
@@ -381,6 +382,56 @@ class Fleet:
 
         except FileNotFoundError:
             print("No existing fleet data found. Starting with an empty fleet.")
+
+    def view_csv(self):
+        try:
+            with open(self.CSV_FILE, "r", newline="", encoding="utf-8") as file:
+                reader = csv.DictReader(file)
+
+                print("\n" + "=" * 80)
+                print("SAVED CSV DATA".center(80))
+                print("=" * 80)
+
+                found = False
+
+                for row in reader:
+                    found = True
+
+                    print(f"Hub              : {row['hub_name']}")
+                    print(f"Vehicle Type     : {row['vehicle_type']}")
+                    print(f"Vehicle ID       : {row['vehicle_id']}")
+                    print(f"Model            : {row['model']}")
+                    print(f"Battery          : {row['battery']}%")
+                    print(f"Status           : {row['status']}")
+                    print(f"Rental Price     : {row['rental_price']}")
+
+                    if row["vehicle_type"] == "Electric Car":
+                        print(f"Seating Capacity : {row['seating_capacity']}")
+
+                    elif row["vehicle_type"] == "Electric Scooter":
+                        print(f"Max Speed Limit  : {row['max_speed_limit']}")
+
+                    print("-" * 80)
+
+                if not found:
+                    print("CSV file is empty.")
+
+        except FileNotFoundError:
+            print("CSV file does not exist.")
+
+    def view_json(self):
+        try:
+            with open(self.JSON_FILE, "r", encoding="utf-8") as file:
+                data = json.load(file)
+
+            print("\n" + "=" * 80)
+            print("SAVED JSON DATA".center(80))
+            print("=" * 80)
+
+            print(json.dumps(data, indent=4))
+
+        except FileNotFoundError:
+            print("JSON file does not exist.")
 
     def save_to_json(self):
 

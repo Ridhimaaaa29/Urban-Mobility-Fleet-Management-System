@@ -19,8 +19,8 @@ def display_menu():
     print("9. Advanced Sorting Options")
     print("10. Save Fleet to JSON")
     print("11. Load Fleet from JSON")
-    print("12. Save Fleet and Exit")
-
+    print("12. View Saved Data")
+    print("13. Save Fleet and Exit")
 
 def main():
 
@@ -36,7 +36,7 @@ def main():
         display_menu()
 
         try:
-            choice = int(input("\nEnter your choice (1-12): "))
+            choice = int(input("\nEnter your choice (1-13): "))
         
             if choice == 1:
                 fleet.add_hub()
@@ -81,6 +81,36 @@ def main():
                 fleet.load_from_json()
 
             elif choice == 12:
+
+                while True:
+
+                    print("\n" + "=" * 50)
+                    print("View Saved Data".center(50))
+                    print("=" * 50)
+
+                    print("\n1. View CSV Data")
+                    print("2. View JSON Data")
+                    print("3. Back to Main Menu")
+
+                    try: 
+                        view_choice = int(input("\nEnter your choice (1-3): "))
+
+                        if view_choice == 1:
+                            fleet.view_csv()
+
+                        elif view_choice == 2:
+                            fleet.view_json()
+
+                        elif view_choice == 3:
+                            break
+
+                        else:
+                            print("Invalid choice. Please select a valid option.")
+
+                    except ValueError:
+                        print("Invalid input. Please enter a number.")
+
+            elif choice == 13:
                 fleet.save_to_csv()  # Save fleet data to CSV before exiting
                 fleet.save_to_json()
                 print("Fleet data saved. Thank you for using Eco-Ride Urban Mobility System!")
