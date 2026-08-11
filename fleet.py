@@ -1,5 +1,7 @@
 import csv
+import json
 from collections import defaultdict
+
 from hub import Hub
 from electric_car import ElectricCar
 from electric_scooter import ElectricScooter
@@ -8,6 +10,7 @@ from electric_scooter import ElectricScooter
 class Fleet:
 
     CSV_FILE = "fleet.csv"
+    JSON_FILE = "fleet.json"
 
     def __init__(self):
         self.__hubs = {}
@@ -378,3 +381,120 @@ class Fleet:
 
         except FileNotFoundError:
             print("No existing fleet data found. Starting with an empty fleet.")
+
+    def save_to_json(self):
+
+        data = {
+            "hubs" : []
+        }
+
+        for hub_name, hub in self.__hubs.items():
+
+            hub_data = {
+                "hub_name": hub_name,
+                "vehicles": []
+            }
+
+            for vehicle in hub.get_vehicles():
+
+                vehicle_data = {
+                    "vehicle_type": self.get_vehicle_type(vehicle),
+                    "vehicle_id": vehicle.get_vehicle_id(),
+                    "model": vehicle.get_model(),
+                    "battery": vehicle.get_battery_percentage(),
+                    "status": vehicle.get_maintenance_status(),
+                    "rental_price": vehicle.get_rental_price()
+                }
+
+                if isinstance(vehicle, ElectricCar):
+
+                    vehicle_data["seating_capacity"] = (
+                        vehicle.seating_capacity
+                    )
+
+                elif isinstance(vehicle, ElectricScooter):
+
+                    vehicle_data["max_speed_limit"] = (
+                        vehicle.max_speed_limit
+                    )
+
+                hub_data["vehicles"].append(vehicle_data)
+
+            data["hubs"].append(hub_data)
+
+        with open(self.JSON_FILE, "w", encoding="utf-8") as file:
+
+            json.dump(
+                data,
+                file,
+                indent=4
+            )
+
+        print("Fleet data saved to JSON successfully.")
+
+    def load_from_json(self):
+        try:
+
+            with open(self.JSON_FILE, "r", encoding="utf-8") as file:
+
+                data = json.load(file)
+
+            # Clear current fleet before loading
+            self.__hubs.clear()
+            self.__vehicle_categories.clear()
+
+            for hub_data in data.get("hubs", []):
+
+                hub_name = hub_data["hub_name"]
+
+                hub = Hub(hub_name)
+                self.__hubs[hub_name] = hub
+
+                for vehicle_data in hub_data.get("vehicles", []):
+
+                    vehicle_type = vehicle_data["vehicle_type"]
+
+                    if vehicle_type == "Electric Car":
+
+                        vehicle = ElectricCar(
+                            vehicle_data["vehicle_id"],
+                            vehicle_data["model"],
+                            float(vehicle_data["battery"]),
+                            vehicle_data["status"],
+                            float(vehicle_data["rental_price"]),
+                            int(vehicle_data["seating_capacity"])
+                        )
+
+                    elif vehicle_type == "Electric Scooter":
+
+                        vehicle = ElectricScooter(
+                            vehicle_data["vehicle_id"],
+                            vehicle_data["model"],
+                            float(vehicle_data["battery"]),
+                            vehicle_data["status"],
+                            float(vehicle_data["rental_price"]),
+                            int(vehicle_data["max_speed_limit"])
+                        )
+
+                    else:
+                        print(
+                            f"Unknown vehicle type: {vehicle_type}"
+                        )
+                        continue
+
+                    added = hub.add_vehicle(vehicle)
+
+                    if added:
+
+                        self.__vehicle_categories[
+                            vehicle_type
+                        ].append(vehicle)
+
+            print("Fleet data loaded from JSON successfully.")
+
+        except FileNotFoundError:
+
+            print(
+                "No JSON fleet data found. "
+                "Starting with an empty fleet."
+            )

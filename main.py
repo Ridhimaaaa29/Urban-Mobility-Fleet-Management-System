@@ -17,7 +17,9 @@ def display_menu():
     print("7. Fleet Analytics")
     print("8. Sort Vehicles Alphabetically by Model")
     print("9. Advanced Sorting Options")
-    print("10. Save and Exit")
+    print("10. Save Fleet to JSON")
+    print("11. Load Fleet from JSON")
+    print("12. Save Fleet and Exit")
 
 
 def main():
@@ -34,7 +36,7 @@ def main():
         display_menu()
 
         try:
-            choice = int(input("\nEnter your choice (1-10): "))
+            choice = int(input("\nEnter your choice (1-12): "))
         
             if choice == 1:
                 fleet.add_hub()
@@ -71,7 +73,16 @@ def main():
                 fleet.advanced_sort()
 
             elif choice == 10:
-                fleet.save_to_csv()
+                heading("Save Fleet to JSON")
+                fleet.save_to_json()
+
+            elif choice == 11:
+                heading("Load Fleet from JSON")
+                fleet.load_from_json()
+
+            elif choice == 12:
+                fleet.save_to_csv()  # Save fleet data to CSV before exiting
+                fleet.save_to_json()
                 print("Fleet data saved. Thank you for using Eco-Ride Urban Mobility System!")
                 break
 
