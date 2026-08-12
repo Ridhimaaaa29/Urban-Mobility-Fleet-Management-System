@@ -1,0 +1,6 @@
+hub_name,vehicle_type,vehicle_id,model,battery,status,rental_price,seating_capacity,max_speed_limit
+Airport,Electric Car,101,Scorpio,100.0,Available,10000.0,7,
+Airport,Electric Scooter,210,Honda Activa,98.0,Available,900.0,,80
+Chandigarh,Electric Car,C101,Tesla,90.0,Available,1000.0,5,
+Chandigarh,Electric Scooter,S101,Ather,80.0,On Trip,500.0,,80
+Mohali,Electric Car,201,Merc,100.0,Under Maintenance,8000.0,5,
