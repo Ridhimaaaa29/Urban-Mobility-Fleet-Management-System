@@ -45,10 +45,10 @@ class Hub:
 
     def display_vehicles(self):
 
-        print(f"\nHub : {self.name}")
+        print(f"\nHub : {self.__hub_name}")
         print("-" * 50)
 
-        if not self.vehicles:
+        if not self.__vehicles:
             print("No vehicles available.")
             return
 
