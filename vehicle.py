@@ -43,7 +43,7 @@ class Vehicle(ABC):
         if 0 <= percentage <= 100:
             self.__battery_percentage = percentage
         else:
-            print("Battery percentage must be between 0 and 100.")
+            raise ValueError("Battery percentage must be between 0 and 100.")
 
     def set_maintenance_status(self, status):
 
@@ -59,7 +59,7 @@ class Vehicle(ABC):
         if price >= 0:
             self.__rental_price = price
         else:
-            print("Rental price cannot be negative.")
+            raise ValueError("Rental price cannot be negative.")
 
 
     @abstractmethod
