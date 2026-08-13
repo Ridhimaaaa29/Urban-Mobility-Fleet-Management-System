@@ -52,7 +52,7 @@ class Hub:
             print("No vehicles available.")
             return
 
-        for vehicle in self.vehicles:
+        for vehicle in self.__vehicles:
             vehicle.display_details()
             print("-" * 50)
 
