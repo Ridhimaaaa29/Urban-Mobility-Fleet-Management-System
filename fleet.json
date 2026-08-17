@@ -1,0 +1,68 @@
+{
+    "hubs": [
+        {
+            "hub_name": "Airport",
+            "vehicles": [
+                {
+                    "vehicle_type": "Electric Car",
+                    "vehicle_id": "101",
+                    "model": "Scorpio",
+                    "battery": 100.0,
+                    "status": "Available",
+                    "rental_price": 10000.0,
+                    "seating_capacity": 7
+                },
+                {
+                    "vehicle_type": "Electric Scooter",
+                    "vehicle_id": "210",
+                    "model": "Honda Activa",
+                    "battery": 98.0,
+                    "status": "Available",
+                    "rental_price": 900.0,
+                    "max_speed_limit": 80
+                }
+            ]
+        },
+        {
+            "hub_name": "Chandigarh",
+            "vehicles": [
+                {
+                    "vehicle_type": "Electric Car",
+                    "vehicle_id": "C101",
+                    "model": "Tesla",
+                    "battery": 90.0,
+                    "status": "Available",
+                    "rental_price": 1000.0,
+                    "seating_capacity": 5
+                },
+                {
+                    "vehicle_type": "Electric Scooter",
+                    "vehicle_id": "S101",
+                    "model": "Ather",
+                    "battery": 80.0,
+                    "status": "On Trip",
+                    "rental_price": 500.0,
+                    "max_speed_limit": 80
+                }
+            ]
+        },
+        {
+            "hub_name": "Mohalu",
+            "vehicles": []
+        },
+        {
+            "hub_name": "Mohali",
+            "vehicles": [
+                {
+                    "vehicle_type": "Electric Car",
+                    "vehicle_id": "201",
+                    "model": "Merc",
+                    "battery": 100.0,
+                    "status": "Under Maintenance",
+                    "rental_price": 8000.0,
+                    "seating_capacity": 5
+                }
+            ]
+        }
+    ]
+}
